@@ -1,5 +1,6 @@
 package pages.contentmanagement.fashiontemplateedit;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,7 +14,8 @@ public class FashionNavigationBarEditPage {
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
-	@FindBy(xpath="//input[@type='text']")
+	
+	@FindBy(xpath="//input[@placeholder='Your Brand Name']")
 	private WebElement logoTextBox;
 	
 	@FindBy(xpath="//button[text()='Save']")
@@ -32,22 +34,34 @@ public class FashionNavigationBarEditPage {
 	@FindBy(xpath="//button[text()='Saved Style']")
 	private WebElement savedstylecontentmanagement;
 	
-	 @FindBy(xpath="//img[@alt='Fashion Style 2026']/ancestor::div[contains(@class,'group')]//button[contains(.,'Use')]")
+	 @FindBy(xpath="//img[@alt='Fashion Style 2025 cover']/ancestor::div[contains(@class,'group')]//button[contains(.,'Use')]")
 	 private WebElement newsavedstyleusebutton;
 	
 	 @FindBy(xpath="//button[text()='Publish']")
 	 private WebElement publishbutton;
+	 
+	 @FindBy(xpath="//button[@class='px-4 py-2 bg-[#7658A0] text-white rounded-lg text-sm']")
+	 private WebElement publishpopup;
 	
 	 @FindBy(xpath="//button[text()='Back']")
 	 private WebElement backButton;
 
+	 @FindBy(xpath="//span[text()='Storefront']")
+	 private WebElement storefront;
+	
 	 public void clickBackButton() {
 	     backButton.click();
 	 }
 	public void clearLogoText() {
-	    logoTextBox.clear();
+	    //logoTextBox.clear();
+	    logoTextBox.click();
+
+	    logoTextBox.sendKeys(Keys.CONTROL + "a");
+
+	    logoTextBox.sendKeys(Keys.DELETE);
 	}
 	public void enterLogoText(String expectedLogoText) {
+		
 		logoTextBox.sendKeys(expectedLogoText);		
 	}
 	public void clickSaveButton() {		
@@ -71,6 +85,18 @@ public class FashionNavigationBarEditPage {
 	public void newsavedstyleclick() {
 		
 		newsavedstyleusebutton.click();
+	}
+	public void clickPublishButton() {
+		publishbutton.click();
+		
+	}
+	public void clickPublishpopupButton() {
+		publishpopup.click();
+		
+	}
+	public void clickstorefront() {
+		storefront.click();
+		
 	}
 	
 }

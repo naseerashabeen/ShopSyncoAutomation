@@ -15,6 +15,7 @@ public class Constant {
 	 public static final String FASHION_EDIT_PAGE_DISPLAYED_ERROR="fashion edit page is not displayed";
 	 public static final String MODERNMINIMALIST_EDIT_PAGE_DISPLAYED_ERROR="fashion edit page is not displayed";
 	 public static final String BOLDANDBRIGHT_EDIT_PAGE_DISPLAYED_ERROR="fashion edit page is not displayed";
+	 public static final String LOGOTEXT_UPDATED_ERROR="logo text is not updated in store front";
 
 	 
 

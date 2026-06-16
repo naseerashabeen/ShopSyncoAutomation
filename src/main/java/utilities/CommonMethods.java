@@ -59,6 +59,6 @@ public class CommonMethods
     	 WebDriverWait wait3 = new WebDriverWait(driver, Duration.ofSeconds(15));
 
     	    wait3.until(ExpectedConditions.visibilityOfElementLocated(
-    	            By.xpath("//div[text()='Fashion']")));
+    	            By.xpath("//*[normalize-space()='Fashion']")));
     }
 }
