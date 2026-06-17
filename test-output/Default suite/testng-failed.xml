@@ -5,9 +5,9 @@
     <classes>
       <class name="testScripts.contentmanagement.fashion.FashionNavigationBarTest">
         <methods>
+          <include name="verifyNavigationBarLogoTextStyle"/>
           <include name="closeBrowser"/>
           <include name="initializeBrowser"/>
-          <include name="verifyLogoText"/>
         </methods>
       </class> <!-- testScripts.contentmanagement.fashion.FashionNavigationBarTest -->
     </classes>

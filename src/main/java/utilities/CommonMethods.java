@@ -38,8 +38,8 @@ public class CommonMethods
 
 	public void logintoFashionTemplateEditpage(WebDriver driver) throws IOException
     {
-    	CommonMethods cm=new CommonMethods();
-		cm.loginToApplication(driver);
+		
+    	loginToApplication(driver);
         HomePage hp=new HomePage(driver);
         hp.clickcontentmanagementinhomepage();
     	
@@ -57,8 +57,7 @@ public class CommonMethods
  		);
  		cmp.clickOkButton();
     	 WebDriverWait wait3 = new WebDriverWait(driver, Duration.ofSeconds(15));
-
     	    wait3.until(ExpectedConditions.visibilityOfElementLocated(
-    	            By.xpath("//*[normalize-space()='Fashion']")));
+    	            By.xpath("//button[text()='Save']")));
     }
 }

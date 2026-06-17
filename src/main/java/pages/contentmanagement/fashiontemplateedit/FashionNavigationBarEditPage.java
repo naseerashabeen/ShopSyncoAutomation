@@ -1,5 +1,6 @@
 package pages.contentmanagement.fashiontemplateedit;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -34,8 +35,8 @@ public class FashionNavigationBarEditPage {
 	@FindBy(xpath="//button[text()='Saved Style']")
 	private WebElement savedstylecontentmanagement;
 	
-	 @FindBy(xpath="//img[@alt='Fashion Style 2025 cover']/ancestor::div[contains(@class,'group')]//button[contains(.,'Use')]")
-	 private WebElement newsavedstyleusebutton;
+	// @FindBy(xpath="//img[@alt='Fashion Style 2025 cover']/ancestor::div[contains(@class,'group')]//button[contains(.,'Use')]")
+	 //private WebElement newsavedstyleusebutton;
 	
 	 @FindBy(xpath="//button[text()='Publish']")
 	 private WebElement publishbutton;
@@ -49,6 +50,15 @@ public class FashionNavigationBarEditPage {
 	 @FindBy(xpath="//span[text()='Storefront']")
 	 private WebElement storefront;
 	
+	 @FindBy(xpath="//button[@title='Bold']")
+		private WebElement boldButton;
+
+		@FindBy(xpath="//button[@title='Italic']")
+		private WebElement italicButton;
+
+		@FindBy(xpath="//button[@title='Underline']")
+		private WebElement underlineButton;
+
 	 public void clickBackButton() {
 	     backButton.click();
 	 }
@@ -82,9 +92,11 @@ public class FashionNavigationBarEditPage {
 	public void clicksavedstylecontentmanagement() {
 		savedstylecontentmanagement.click();
 	}
-	public void newsavedstyleclick() {
-		
-		newsavedstyleusebutton.click();
+	public void clickUseButton(String styleName)
+	{
+	    driver.findElement(
+	    By.xpath("//h3[contains(.,'"+styleName+"')]/ancestor::div[contains(@class,'p-4')]/preceding-sibling::div//button[contains(.,'Use')]")
+	    ).click();
 	}
 	public void clickPublishButton() {
 		publishbutton.click();
@@ -97,6 +109,21 @@ public class FashionNavigationBarEditPage {
 	public void clickstorefront() {
 		storefront.click();
 		
+	}
+	
+	public void clickBold()
+	{
+	    boldButton.click();
+	}
+
+	public void clickItalic()
+	{
+	    italicButton.click();
+	}
+
+	public void clickUnderline()
+	{
+	    underlineButton.click();
 	}
 	
 }

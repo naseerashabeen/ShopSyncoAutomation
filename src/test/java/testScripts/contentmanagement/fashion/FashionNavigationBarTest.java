@@ -12,6 +12,8 @@ import com.project.BaseShopsynco;
 import constants.Constant;
 import pages.contentmanagement.fashiontemplateedit.FashionNavigationBarEditPage;
 import utilities.CommonMethods;
+import utilities.RandomUtility;
+import utilities.WaitUtility;
 
 public class FashionNavigationBarTest extends BaseShopsynco{	
 	@Test
@@ -21,79 +23,37 @@ public class FashionNavigationBarTest extends BaseShopsynco{
 		c.logintoFashionTemplateEditpage(driver);
 		FashionNavigationBarEditPage fn=new FashionNavigationBarEditPage(driver);
 		fn.clearLogoText();
-		String expectedLogoText = "kichufashion";
+		
+		String uniqueValue = RandomUtility.generateLogoText();
+		String expectedLogoText = "Fashion"+uniqueValue;
+		String styleName = RandomUtility.generateStyleName();
 		fn.enterLogoText(expectedLogoText);
 		fn.clickSaveButton();
-		fn.enterStyleName("Fashion Style 2025");
+		fn.enterStyleName(styleName);
 		fn.clicksavestylepopup();
-		WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		WebElement okButton = wait1.until(
-		        ExpectedConditions.elementToBeClickable(
-		                By.xpath("//button[@id='swal-ok-btn']")
-		        )
-		);
-
+		WaitUtility.waitForClickable(driver,By.id("swal-ok-btn"));
 		fn.clickokbutton();
-
-		WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-		// Wait until popup overlay disappears
-		wait2.until(ExpectedConditions.invisibilityOfElementLocated(
-		        By.xpath("//div[contains(@class,'bg-black/40')]")));
-
-		// Wait until Back button is clickable
-		wait2.until(ExpectedConditions.elementToBeClickable(
-		        By.xpath("//button[text()='Back']")));
-
+		WaitUtility.waitForInvisible(driver,By.xpath("//div[contains(@class,'bg-black/40')]"));
+		WaitUtility.waitForClickable(driver, By.xpath("//button[text()='Back']"));
 		fn.clickBackButton();
-		WebDriverWait wait3 = new WebDriverWait(driver, Duration.ofSeconds(10));
-		wait3.until(ExpectedConditions.urlContains("content"));
-		
+		WaitUtility.waitForUrl(driver, "content");
 		fn.clicksavedstylecontentmanagement();
-		WebDriverWait wait4= new WebDriverWait(driver, Duration.ofSeconds(50));
- 	    WebElement fashionCard = wait4.until(
- 		        ExpectedConditions.presenceOfElementLocated(
- 		                By.xpath("//h3[contains(.,'Fashion Style 2025')]")
- 		        )
- 		);
- 	   System.out.println(fashionCard.getText());
- 	    fn.newsavedstyleclick();
- 	   WebDriverWait wait5 = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		WebElement okButton1 = wait5.until(
-		        ExpectedConditions.elementToBeClickable(
-		                By.xpath("//button[@id='swal-ok-btn']")
-		        )
-		);
+		WaitUtility.waitForVisible(driver, By.xpath("//h3[contains(.,'"+styleName+"')]"));
+		System.out.println(styleName);
+		fn.clickUseButton(styleName);
+ 	    WaitUtility.waitForClickable(driver, By.xpath("//button[@id='swal-ok-btn']"));
  	    fn.clickokbutton();
  	    fn.clickPublishButton();
  	    fn.clickPublishpopupButton();
- 	   WebDriverWait wait6 = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		WebElement okButton2 = wait5.until(
-		        ExpectedConditions.elementToBeClickable(
-		                By.xpath("//button[@id='swal-ok-btn']")
-		        )
-		);
+ 	    WaitUtility.waitForClickable(driver, By.xpath("//button[@id='swal-ok-btn']"));
 	    fn.clickokbutton();
-	 // Wait until Back button is clickable
-		WebDriverWait wait7 = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-	 		wait7.until(ExpectedConditions.elementToBeClickable(
-	 		        By.xpath("//button[text()='Back']")));
-
+	    WaitUtility.waitForClickable(driver,By.xpath("//button[text()='Back']"));
 	 		fn.clickBackButton();
 	 	// Store current tab
 	 		String parentWindow = driver.getWindowHandle();
-
 	 		fn.clickstorefront();
-	 		
-	 		// Wait until new tab opens
-	 		WebDriverWait wait8 = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-	 		wait8.until(ExpectedConditions.numberOfWindowsToBe(2));
-
+	 		new WebDriverWait(driver, Duration.ofSeconds(20))
+            .until(ExpectedConditions.numberOfWindowsToBe(2));
 	 		// Switch to new tab
 	 		for (String window : driver.getWindowHandles()) {
 
@@ -104,43 +64,90 @@ public class FashionNavigationBarTest extends BaseShopsynco{
 	 		        break;
 	 		    }
 	 		}
-	 		wait8.until(webDriver ->
-	 	    ((String)((org.openqa.selenium.JavascriptExecutor)webDriver)
-	 	    .executeScript("return document.readyState"))
-	 	    .equals("complete")
-	 	  );
-	 		
-	 		// Wait until logo is visible
-	 		WebElement logo = wait8.until(
-	 		        ExpectedConditions.visibilityOfElementLocated(
-	 		                By.xpath("//*[contains(text(),'kichu')]")
-	 		        )
-	 		);
-
+	 		WaitUtility.waitForPageLoad(driver);
+	 		WebElement logo = WaitUtility.waitForVisible(driver,By.xpath("//a[@class='hover:opacity-80 transition shrink-0 inline-flex items-center justify-center']"));
 	 		String actualLogoText = logo.getText();
-
 	 		Assert.assertEquals(
 	 		        actualLogoText.toLowerCase(),
 	 		        expectedLogoText.toLowerCase(),
-	 		        Constant.LOGOTEXT_UPDATED_ERROR
-	 		);
-	 	
-	}		
-	public void verifyLogoTypeText()
+	 		        Constant.LOGOTEXT_UPDATED_ERROR);
+	 		}
+	@Test
+	public void verifyNavigationBarLogoTextStyle() throws IOException
 	{
-		
-	}
-	public void verifyLogoTypeImage()
-	{
-		
-	}
-	public void verifyLogoPositionCenter()
-	{
-		
-	}
-	public void verifyBackgroundColor()
-	{
-		
-	}
+		CommonMethods c=new CommonMethods();
+		c.logintoFashionTemplateEditpage(driver);
+		FashionNavigationBarEditPage fn=new FashionNavigationBarEditPage(driver);
+		fn.clearLogoText();
+		String uniqueValue = RandomUtility.generateLogoText();
+		String expectedLogoText = "Fashion"+uniqueValue;
+		String styleName = RandomUtility.generateStyleName();
+		fn.enterLogoText(expectedLogoText);
+		fn.clickBold();
+	    fn.clickItalic();
+	    fn.clickUnderline();
+	    fn.clickSaveButton();
+	    fn.enterStyleName(styleName);
+		fn.clicksavestylepopup();
+		WaitUtility.waitForClickable(driver,By.id("swal-ok-btn"));
+		fn.clickokbutton();
+		WaitUtility.waitForInvisible(driver,By.xpath("//div[contains(@class,'bg-black/40')]"));
+		WaitUtility.waitForClickable(driver, By.xpath("//button[text()='Back']"));
+		fn.clickBackButton();
+		WaitUtility.waitForUrl(driver, "content");
+		fn.clicksavedstylecontentmanagement();
+		WaitUtility.waitForVisible(driver, By.xpath("//h3[contains(.,'"+styleName+"')]"));
+		System.out.println(styleName);
+		fn.clickUseButton(styleName);
+ 	    WaitUtility.waitForClickable(driver, By.xpath("//button[@id='swal-ok-btn']"));
+ 	    fn.clickokbutton();
+ 	    fn.clickPublishButton();
+ 	    fn.clickPublishpopupButton();
+ 	    WaitUtility.waitForClickable(driver, By.xpath("//button[@id='swal-ok-btn']"));
+	    fn.clickokbutton();
+	    WaitUtility.waitForClickable(driver,By.xpath("//button[text()='Back']"));
+	 		fn.clickBackButton();
+	 	// Store current tab
+	 		String parentWindow = driver.getWindowHandle();
+	 		fn.clickstorefront();
+	 		new WebDriverWait(driver, Duration.ofSeconds(20))
+            .until(ExpectedConditions.numberOfWindowsToBe(2));
+	 		// Switch to new tab
+	 		for (String window : driver.getWindowHandles()) {
+
+	 		    if (!window.equals(parentWindow)) {
+
+	 		        driver.switchTo().window(window);
+
+	 		        break;
+	 		    }
+	 		}
+	 		driver.navigate().refresh();
+	 		WaitUtility.waitForPageLoad(driver);
+	 		
+	 		WebElement logo = WaitUtility.waitForVisible(driver,By.xpath("//a[@class='hover:opacity-80 transition shrink-0 inline-flex items-center justify-center']"));
+			    String fontWeight =logo.getCssValue("font-weight");
+			    String fontStyle =logo.getCssValue("font-style");
+			    String textDecoration =logo.getCssValue("text-decoration");
+			    Assert.assertTrue(Integer.parseInt(fontWeight) >= 700,"Bold is not applied");
+			    Assert.assertEquals(fontStyle,"italic","Italic is not applied");
+			    Assert.assertTrue(textDecoration.contains("underline"),"Underline is not applied" );
+		}
+		public void verifyNavigationBarLogoTextFont() 
+		{
+			
+		}
+		public void verifyLogoTypeImage()
+		{
+			
+		}
+		public void verifyLogoPositionCenter()
+		{
+			
+		}
+		public void verifyBackgroundColor()
+		{
+			
+		}
 	}
 
