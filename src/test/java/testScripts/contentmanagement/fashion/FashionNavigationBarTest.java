@@ -133,6 +133,113 @@ public class FashionNavigationBarTest extends BaseShopsynco{
 			    Assert.assertEquals(fontStyle,"italic","Italic is not applied");
 			    Assert.assertTrue(textDecoration.contains("underline"),"Underline is not applied" );
 		}
+	@Test
+	public void verifyNavigationBarFontSize() throws IOException
+	{
+	    CommonMethods c = new CommonMethods();
+	    c.logintoFashionTemplateEditpage(driver);
+	    FashionNavigationBarEditPage fn =
+	            new FashionNavigationBarEditPage(driver);
+	    String unique = String.valueOf(System.currentTimeMillis());
+	    String expectedLogoText = "Fashion"+unique;
+	    String styleName = "Fashion Style "+unique;
+	    String expectedFontSize = "35px";
+	    fn.clearLogoText();
+
+	    fn.enterLogoText(expectedLogoText);
+
+	    //change font size
+
+	    fn.enterFontSize("35");
+
+	    //save
+
+	    fn.clickSaveButton();
+
+	    fn.enterStyleName(styleName);
+
+	    fn.clicksavestylepopup();
+
+	    WaitUtility.waitForClickable(driver,By.id("swal-ok-btn"));
+
+	    fn.clickokbutton();
+
+	    WaitUtility.waitForClickable(
+	            driver,
+	            By.xpath("//button[text()='Back']"));
+
+	    fn.clickBackButton();
+
+	    WaitUtility.waitForUrl(driver,"content");
+
+	    //saved style
+
+	    fn.clicksavedstylecontentmanagement();
+
+	    WaitUtility.waitForVisible(
+	            driver,
+	            By.xpath("//h3[contains(.,'"+styleName+"')]"));
+
+	    fn.clickUseButton(styleName);
+
+	    WaitUtility.waitForClickable(
+	            driver,
+	            By.id("swal-ok-btn"));
+
+	    fn.clickokbutton();
+
+	    //publish
+
+	    fn.clickPublishButton();
+
+	    fn.clickPublishpopupButton();
+
+	    WaitUtility.waitForClickable(
+	            driver,
+	            By.id("swal-ok-btn"));
+
+	    fn.clickokbutton();
+
+	    fn.clickBackButton();
+
+	    //storefront
+
+	    String parentWindow =
+	            driver.getWindowHandle();
+
+	    fn.clickstorefront();
+
+	    new WebDriverWait(driver,
+	            Duration.ofSeconds(20))
+	            .until(ExpectedConditions.numberOfWindowsToBe(2));
+
+	    for(String window:driver.getWindowHandles())
+	    {
+	        if(!window.equals(parentWindow))
+	        {
+	            driver.switchTo().window(window);
+
+	            break;
+	        }
+	    }
+
+	    WaitUtility.waitForPageLoad(driver);
+
+	    WebElement logo =
+	            WaitUtility.waitForVisible(
+	            driver,
+	            By.xpath("//a[contains(@class,'inline-flex')]"));
+
+	    String actualFontSize =
+	            logo.getCssValue("font-size");
+
+	    System.out.println(actualFontSize);
+
+	    Assert.assertEquals(
+	            actualFontSize,
+	            expectedFontSize,
+	            "Font size is not updated");
+	}
 		public void verifyNavigationBarLogoTextFont() 
 		{
 			
